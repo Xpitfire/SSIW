@@ -1,0 +1,38 @@
+# huggingface hub
+hub_model_id: "segformer-finetuned-segments-cmp-facade"
+
+# model
+model_id: 'SegFormer_Baseline'
+ouptup_dir: "segformer-finetuned-segments-cmp-facade-outputs"
+
+# model checkpoint presets
+ckpt_path: "models/segformer_7data.pth"
+baseline_model: "nvidia/mit-b0"
+
+# data
+data_dir: "data/"
+
+# data augmentation
+colorjitter:
+  brightness: 0.25
+  contrast: 0.25
+  saturation: 0.25
+  hue: 0.1
+
+# training hyperparams
+epochs: 50
+lr: 0.00006
+batch_size: 12
+optimizer: "adamw_torch"
+metric: "mean_iou"
+
+# training aux
+save_total_limit: 3
+save_steps: 20
+eval_steps: 20
+eval_accumulation_steps: 5
+load_best_model_at_end: true
+push_to_hub: true
+
+# aux
+logging_steps: 1

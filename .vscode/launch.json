@@ -5,15 +5,29 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Test App",
+            "name": "Load Data",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/tools/test.py",
+            "program": "${workspaceFolder}/dataset/load_cmp.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}",
+                "CUDA_VISIBLE_DEVICES": "0",
+            }
+        },
+        {
+            "name": "Test Model",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/scripts/test.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
                 "--gpus_num", "1",
-                "--root_dir", "test_imgs/cmp/extended",
+                "--root_dir", "data/test/",
                 "--img_file_type", "jpg"
             ],
             "env": {
@@ -22,16 +36,13 @@
             }
         },
         {
-            "name": "Train App",
+            "name": "Train Model",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/tools/train.py",
+            "program": "${workspaceFolder}/scripts/train.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
-                "--gpus_num", "1",
-                "--root_dir", "test_imgs/cmp/extended",
-                "--img_file_type", "jpg"
             ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}",
