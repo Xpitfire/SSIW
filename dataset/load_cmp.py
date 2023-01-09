@@ -1,10 +1,12 @@
 import os
 from PIL import Image
 import numpy as np
-from torch.utils.data import Dataset
+import torch
+import numpy as np
+from datasets import Dataset, DatasetDict
 
 
-class CMPDataset(Dataset):
+class CMPDataset(torch.utils.data.Dataset):
     num_labels = 13
     
     unique_colors = [
@@ -97,10 +99,6 @@ class CMPDataset(Dataset):
 
 
 if __name__ == '__main__':
-    import numpy as np
-    from dataset.load_cmp import CMPDataset
-    from datasets import Dataset
-
     cmp_ds_train = CMPDataset(root_dir='data/train')
     cmp_ds_eval = CMPDataset(root_dir='data/eval')
     cmp_ds_test = CMPDataset(root_dir='data/test')
@@ -126,7 +124,11 @@ if __name__ == '__main__':
         imgs.append(img)
         lbls.append(lbl)
     test_ds = Dataset.from_dict({"pixel_values": imgs, "label": lbls})
-    
-    train_ds.save_to_disk('data/cmp/train/hf')
-    eval_ds.save_to_disk('data/cmp/eval/hf')
-    test_ds.save_to_disk('data/cmp/test/hf')
+        
+    ds = DatasetDict({
+        'train': train_ds, 
+        'eval': eval_ds, 
+        'test': test_ds
+    })
+    ds.save_to_disk('data/cmp/hf')
+    ds.push_to_hub("Xpitfire/cmp_facade")

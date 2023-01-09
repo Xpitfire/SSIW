@@ -1,13 +1,12 @@
-import os
 import torch
 import hydra
 import torch.distributed as dist
 import numpy as np
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import DictConfig
 from torch import nn
 from utils.segformer import get_configured_segformer
 from dataset.load_cmp import CMPDataset
-from datasets import load_from_disk
+from datasets import load_dataset
 from torchvision.transforms import ColorJitter
 from transformers import SegformerFeatureExtractor
 from typing import Optional, Union, Tuple
@@ -18,6 +17,7 @@ from transformers import TrainingArguments
 from datasets import load_metric
 from transformers import Trainer
 from transformers import SegformerForSemanticSegmentation
+from box import Box
 
 
 class CustomTrainer(Trainer):
@@ -108,20 +108,21 @@ def load_datasets(config: DictConfig) -> None:
     -------
     None
     """
-    data_root = config.data_root
     # used for getting the Dataset properties
-    cmp_ds_train = CMPDataset(root_dir=os.path.join(data_root, 'train'))
-    id2label = cmp_ds_train.id2label
+    id2label = CMPDataset.id2label
     label2id = {v: k for k, v in id2label.items()}
-    num_labels = cmp_ds_train.num_labels
+    num_labels = CMPDataset.num_labels
 
-    # load the dataset in the hugginface exported format
-    train_ds = load_from_disk(os.path.join(data_root, 'cmp/train/hf'))
-    eval_ds = load_from_disk(os.path.join(data_root, 'cmp/eval/hf'))
+    ds = load_dataset('Xpitfire/cmp_facade')
+
+    train_ds = ds['train']
+    eval_ds = ds['eval']
+    test_ds = ds['test']
     
     # assign values
     config.train_ds = train_ds
     config.eval_ds = eval_ds
+    config.test_ds = test_ds
     config.id2label = id2label
     config.label2id = label2id
     config.num_labels = num_labels
@@ -184,7 +185,13 @@ def init_baseline_model(config: DictConfig) -> None:
         id2label=config.id2label,
         label2id=config.label2id
     )
-    model = model.cuda()
+    model = model.cuda()    
+    if config.baseline_ckpt_path and len(config.baseline_ckpt_path) > 0:
+        # set the path to the checkpoint file
+        ckpt_path = config.baseline_ckpt_path
+        # load the checkpoint file and save it to the 'checkpoint' variable
+        checkpoint = torch.load(ckpt_path, map_location='cpu')['state_dict']
+        model.load_state_dict(checkpoint, strict=True)
     config.model = model
     
     
@@ -301,7 +308,7 @@ def init_training(config: DictConfig) -> None:
     None
     """
     training_args = TrainingArguments(
-        "segformer-finetuned-segments-cmp-facade-outputs",
+        config.ouptup_dir,
         learning_rate=config.lr,
         num_train_epochs=config.epochs,
         per_device_train_batch_size=config.batch_size,
@@ -346,6 +353,8 @@ def main(config: DictConfig) -> None:
     -------
     None
     """
+    config = Box(config)
+    
     # prepare the dataset
     load_datasets(config)
     prepare_dataset_transforms(config)

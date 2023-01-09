@@ -23,17 +23,4 @@ Load environment:
 conda activate cmp
 ```
 
-## Prepare Dataset
-```bash
-# create data dir
-mkdir data
-
-# download data
-curl https://cmp.felk.cvut.cz/~tylecr1/facade/CMP_facade_DB_base.zip --output CMP_facade_DB_base.zip
-curl https://cmp.felk.cvut.cz/~tylecr1/facade/CMP_facade_DB_extended.zip --output CMP_facade_DB_extended.zip
-
-# unzip dataset
-unzip CMP_facade_DB_base.zip
-unzip CMP_facade_DB_extended.zip
-```
 

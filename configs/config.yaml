@@ -3,9 +3,10 @@ hub_model_id: "segformer-finetuned-segments-cmp-facade"
 
 # model
 model_id: 'SegFormer_Baseline'
-ouptup_dir: "segformer-finetuned-segments-cmp-facade-outputs"
+ouptup_dir: "segformer-finetuned-segments-cmp-facade-outputs-baseline"
 
 # model checkpoint presets
+baseline_ckpt_path: ""
 ckpt_path: "models/segformer_7data.pth"
 baseline_model: "nvidia/mit-b0"
 

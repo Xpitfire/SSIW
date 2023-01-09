@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Load Data",
+            "name": "Create Huggingface Data",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/dataset/load_cmp.py",
