@@ -31,11 +31,11 @@ class CMPDataset(torch.utils.data.Dataset):
         2: "facade", 
         3: "window", 
         4: "door", 
-        5: "pillar", 
+        5: "cornice", 
         6: "sill", 
         7: "balcony", 
         8: "blind",  
-        9: "cornice",
+        9: "pillar",
         10: "deco", 
         11: "molding",
         12: "shop"
