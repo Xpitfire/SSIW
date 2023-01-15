@@ -1,0 +1,100 @@
+{
+  "_name_or_path": "Xpitfire/segformer-finetuned-segments-cmp-facade",
+  "architectures": [
+    "SegformerForImageClassification"
+  ],
+  "attention_probs_dropout_prob": 0.0,
+  "classifier_dropout_prob": 0.1,
+  "decoder_hidden_size": 256,
+  "depths": [
+    2,
+    2,
+    2,
+    2
+  ],
+  "downsampling_rates": [
+    1,
+    4,
+    8,
+    16
+  ],
+  "drop_path_rate": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.0,
+  "hidden_sizes": [
+    32,
+    64,
+    160,
+    256
+  ],
+  "id2label": {
+    "0": "unknown",
+    "1": "background",
+    "2": "facade", 
+    "3": "window", 
+    "4": "door", 
+    "5": "pillar", 
+    "6": "sill", 
+    "7": "balcony", 
+    "8": "blind",  
+    "9": "cornice",
+    "10": "deco", 
+    "11": "molding",
+    "12": "shop"
+  },
+  "image_size": 224,
+  "initializer_range": 0.02,
+  "label2id": {
+    "unknown": 0,
+    "background": 1,
+    "facade": 2, 
+    "window": 3, 
+    "door": 4, 
+    "pillar": 5, 
+    "sill": 6, 
+    "balcony": 7, 
+    "blind": 8,  
+    "cornice": 9,
+    "deco": 10, 
+    "molding": 11,
+    "shop": 12
+  },
+  "layer_norm_eps": 1e-06,
+  "mlp_ratios": [
+    4,
+    4,
+    4,
+    4
+  ],
+  "model_type": "segformer",
+  "num_attention_heads": [
+    1,
+    2,
+    5,
+    8
+  ],
+  "num_channels": 3,
+  "num_encoder_blocks": 4,
+  "patch_sizes": [
+    7,
+    3,
+    3,
+    3
+  ],
+  "reshape_last_stage": true,
+  "semantic_loss_ignore_index": 255,
+  "sr_ratios": [
+    8,
+    4,
+    2,
+    1
+  ],
+  "strides": [
+    4,
+    2,
+    2,
+    2
+  ],
+  "torch_dtype": "float32",
+  "transformers_version": "4.21.1"
+}

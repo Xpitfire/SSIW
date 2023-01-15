@@ -27,18 +27,18 @@ class CMPDataset(torch.utils.data.Dataset):
     
     id2label = {
         0: "unknown",
-        1: "facade",
-        2: "molding",
-        3: "cornice",
-        4: "pillar",
-        5: "window",
-        6: "door",
-        7: "sill",
-        8: "blind",
-        9: "balcony",
-        10: "shop",
-        11: "deco",
-        12: "background"
+        1: "background",
+        2: "facade", 
+        3: "window", 
+        4: "door", 
+        5: "pillar", 
+        6: "sill", 
+        7: "balcony", 
+        8: "blind",  
+        9: "cornice",
+        10: "deco", 
+        11: "molding",
+        12: "shop"
     }
     
     def __init__(self, root_dir, transform=None):
