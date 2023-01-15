@@ -7,7 +7,7 @@ from torch import nn
 from utils.segformer import get_configured_segformer
 from dataset.load_cmp import CMPDataset
 from datasets import load_dataset
-from torchvision.transforms import ColorJitter
+import torchvision.transforms as T
 from transformers import SegformerFeatureExtractor
 from typing import Optional, Union, Tuple
 from torch.nn import CrossEntropyLoss
@@ -142,19 +142,36 @@ def prepare_dataset_transforms(config: DictConfig) -> None:
     None
     """
     feature_extractor = SegformerFeatureExtractor()
-    # create color jittering data augmentation
-    jitter = ColorJitter(brightness=config.colorjitter.brightness, 
-                         contrast=config.colorjitter.contrast, 
-                         saturation=config.colorjitter.saturation, 
-                         hue=config.colorjitter.hue) 
+    jitter = T.ColorJitter(brightness=0.25, contrast=0.25, saturation=0.25, hue=0.1)
+    crop = T.RandomResizedCrop(512)
+    flip = T.RandomHorizontalFlip(0.5)
 
     def train_transforms(example_batch):
+        # color jettering
         images = [jitter(x) for x in example_batch['pixel_values']]
+        
+        # random crop 
+        iamges = [i for i in images]
         labels = [x for x in example_batch['label']]
+        # get features and normalization
         inputs = feature_extractor(images, labels)
+        
+        # perform random cropping and flipping
+        for i in range(len(inputs['pixel_values'])):
+            # concatenate images
+            image = torch.from_numpy(inputs['pixel_values'][i])
+            target = torch.from_numpy(inputs['labels'][i]).view(1, *image.shape[1:]).expand_as(image)
+            both_images = torch.cat((image.unsqueeze(0), target.unsqueeze(0)), 0)
+            # Apply the transformations to both images simultaneously:
+            transformed_images = crop(both_images)
+            transformed_images = flip(both_images)
+            # Get the transformed images:
+            inputs['pixel_values'][i] = transformed_images[0].numpy()
+            inputs['labels'][i] = transformed_images[1][0].to(torch.int64).numpy()
         return inputs
 
     def val_transforms(example_batch):
+        # do not perform any augmentation here
         images = [x for x in example_batch['pixel_values']]
         labels = [x for x in example_batch['label']]
         inputs = feature_extractor(images, labels)
