@@ -1,4 +1,4 @@
-# Tutorial: Semantic Semantic Segmentation
+# Tutorial: Semantic Segmentation
 
 **This guide compares a fine-tuned [SegFormer](https://arxiv.org/abs/2105.15203) with a fine-tuned variant of the 'The devil is in the labels' paper from [Yin et al.](https://arxiv.org/abs/2202.02002) on a semantic segmentation task. The dataset used is the [CMP Facade Database](https://cmp.felk.cvut.cz/~tylecr1/facade/).**
 
